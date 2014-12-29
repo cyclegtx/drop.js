@@ -30,9 +30,9 @@ function Drop(canvas){
 	this.icon_arr_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkFBOTNEMEY4RjFDMTFFNDg4Q0ZDRUIwMkUxODk2RkMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkFBOTNEMTA4RjFDMTFFNDg4Q0ZDRUIwMkUxODk2RkMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCQUE5M0QwRDhGMUMxMUU0ODhDRkNFQjAyRTE4OTZGQyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCQUE5M0QwRThGMUMxMUU0ODhDRkNFQjAyRTE4OTZGQyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PplcfWwAAAgqSURBVHja7F1rsI5V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";
 	this.icon_arr = document.createElement("img");
 	this.icon_arr.src = this.icon_arr_src;
-	this.startd = this.d
+	this.startd = 0;
 
-	this.d = 90;
+	this.d = 0;
 	this.c1 = {
 		x:100,
 		y:100,
@@ -46,7 +46,16 @@ function Drop(canvas){
 	this.calc();
 }
 Drop.prototype.calc = function(){
-
+	this.c1 = {
+		x:100,
+		y:100,
+		r:50-this.d/3
+	};
+	this.c2 = {
+		x:this.c1.x,
+		y:this.c1.y+this.d,
+		r:50-this.d/2
+	};
 	this.p1 = {
 		x:this.c1.x+this.c1.r,
 		y:this.c1.y
@@ -109,8 +118,8 @@ Drop.prototype.draw = function(time){
 
 	this.ctx.beginPath();
 	//绘制上圆
-	/*this.ctx.arc(this.c1.x, this.c1.y, this.c1.r, 0, 2 * Math.PI);
-	this.ctx.fill();*/
+	this.ctx.arc(this.c1.x, this.c1.y, this.c1.r, 0, 2 * Math.PI);
+	this.ctx.fill();
 
 	//绘制曲线
 	this.ctx.moveTo(this.p4.x,this.p4.y);
@@ -121,8 +130,8 @@ Drop.prototype.draw = function(time){
 	this.ctx.fill();
 
 	//绘制下圆
-	/*this.ctx.arc(this.c2.x, this.c2.y, this.c2.r, 0, 2 * Math.PI);
-	this.ctx.fill();*/
+	this.ctx.arc(this.c2.x, this.c2.y, this.c2.r, 0, 2 * Math.PI);
+	this.ctx.fill();
 	this.ctx.closePath();
 	this.ctx.restore();
 	
@@ -153,6 +162,9 @@ Drop.prototype.pull = function(d){
 	if(this.startd+d > this.overboundD){
 		this.overbound();
 	}*/
+	if(this.startd == 0) this.startd = d;
+	this.d = this.startd+d;
+	console.log(this.d)
 }
 Drop.prototype.rebound = function(){
 	//回弹

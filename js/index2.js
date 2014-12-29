@@ -13,7 +13,7 @@ var moveInfo = {
 	touched:false
 }
 var starty = 0;
-/*document.addEventListener(evtStart,function (e) {
+document.addEventListener(evtStart,function (e) {
 	e.preventDefault();
 	moveInfo.touched = true;
 	var y = useTouch?e.changedTouches[0].clientY:e.offsetY;
@@ -25,15 +25,15 @@ document.addEventListener(evtMove,function (e) {
 	var y = useTouch?e.changedTouches[0].clientY:e.offsetY;
 	var wrpHeight = document.getElementById("canvasBox").offsetHeight;
 	var d = Math.abs(starty - y)/wrpHeight;
-	drop.pull(d);
+	drop.pull(Math.abs(starty - y));
 
 });
 document.addEventListener(evtEnd,function (e) {
 	e.preventDefault();
 	moveInfo.touched = false;
 	starty = 0;
-	drop.rebound();
-});*/
+	//drop.rebound();
+});
 window.requestAnimationFrame = (function(){
   return  window.requestAnimationFrame       ||
           window.webkitRequestAnimationFrame ||
@@ -44,7 +44,6 @@ window.requestAnimationFrame = (function(){
 })();
 var canvasWidth=canvas.width,canvasHeight=canvas.height;
 var drop = new Drop(canvas);
-drop.pull(50);
 function loop(time){
 	ctx.clearRect(0,0,canvasWidth,canvasHeight);
 	drop.draw(time);

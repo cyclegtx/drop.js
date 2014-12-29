@@ -94,4 +94,7 @@ this.ctx.fill();
 运行代码：  
 ![](https://raw.githubusercontent.com/cyclegtx/drop.js/master/images/1-5.jpg)  
 
+根据上面坐标的算法，我们可以看到确定了c1的圆心坐标（通常c1的位置是人为指定的），只要修改拉开的距离d就可以使两圆和中间的矩形相应的动起来，而且符合我们想要的效果。下面我们只需要根据鼠标（手指）在屏幕上拖动的距离来增加或者减少d的距离就可以了。  
+![](https://raw.githubusercontent.com/cyclegtx/drop.js/master/images/1-6.gif)  
+
 
