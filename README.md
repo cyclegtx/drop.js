@@ -185,7 +185,7 @@ Drop.prototype.draw = function(time){
 
 时间仓促未作android手机测试，如有任何bug请在Issues中提出。  
 
-项目地址[github](https://github.com/cyclegtx/drop.js)
+项目地址[github](https://github.com/cyclegtx/drop.js)  
 如有问题或者建议请微博<a href="http://weibo.com/uedtianji" target="_blank">@UED天机</a>。我会及时回复  
 更多教程请关注<a href="http://ued.sexy" target="_blank">ued.sexy</a>
 
