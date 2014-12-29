@@ -1,5 +1,6 @@
 #下拉刷新--模仿水滴
 ![最终效果](https://raw.githubusercontent.com/cyclegtx/drop.js/master/images/1.gif)  
+<a href="http://cyclegtx.github.io/drop.js/" target="_blank">测试地址</a>  
 这种拟物的设计曾经多次用在IOS的设计中，上图的下拉刷新就是模仿自苹果的Podcast(播客)。随着系统扁平化设计的步步深入，这种可以让人心领神会的小动画渐渐的被更加标准的旋转的菊花所代替。拟物扁平孰优孰劣，已经不在重要，这里只是想用web技术再仿制一次这个神奇的小水滴。可能已经再也用不上，仅仅作为向优秀设计的致敬。  
 
 效果中的圆圈可以根据手势被拉长，而且在弹回的时候速度由快变慢，有一种橡皮的感觉。速度由快变慢可以使用tween.js中的缓动函数解决，但是变形的圆圈css3有点鞭长莫及，而且考虑到效率的问题还是使用canvas直接绘制。  
@@ -97,4 +98,94 @@ this.ctx.fill();
 根据上面坐标的算法，我们可以看到确定了c1的圆心坐标（通常c1的位置是人为指定的），只要修改拉开的距离d就可以使两圆和中间的矩形相应的动起来，而且符合我们想要的效果。下面我们只需要根据鼠标（手指）在屏幕上拖动的距离来增加或者减少d的距离就可以了。  
 ![](https://raw.githubusercontent.com/cyclegtx/drop.js/master/images/1-6.gif)  
 
+到目前为止效果的核心绘制方法已经介绍完毕，剩下的就是些控制代码和缓动、阴影等效果，重点的代码段摘出来说一下，其他地方就不一一介绍了，大家可以参考源代码。  
+
+1.按钮大小  
+为了可以方便控制按钮的大小，我将c1的半径设置为canvas的宽度的四分之一，并将按钮绘制在canvas的顶部中心，这样只需要用css控制canvas元素的大小就可以控制按钮的大小了，省去了填写参数的麻烦。将移动的距离d设定为拉动的百分比0-1：0的时候未拉动；1的时候拉动到最大位置，继续增大时不再做动画直到d大于1.1表示触发了刷新，按钮回弹。改为百分比后在使用时更容易处理，不管按钮大小如何，只需要传入已拉动的百分比即可。但是问题来了，如何根据百分比得到具体拉动的像素呢，这里采用```this.d*this.canvasWidth/2```,即c1的半径为拉动的最大距离。这样就彻底不用管按钮的实际大小了，在使用的时候用css轻松搞定，这里注意为了保证canvas的高度足够容得下拉长的按钮，canvas的高度至少为宽度的2倍。 
+```javascript
+function Drop(canvas){
+	this.canvas = canvas;
+	this.ctx = canvas.getContext("2d");
+	this.canvasWidth = this.canvas.width;
+	this.canvasHeight = this.canvas.height;
+	//按钮被下拉距离，取值(0-1),大于1.1的时候触发加载
+	this.d = 0;
+	this.c1 = {
+		x:this.canvasWidth/2,
+		y:this.canvasWidth/2
+	};
+	this.c2 = {
+		x:this.canvasWidth/2
+	};
+	this.calc();
+}
+Drop.prototype.calc = function(){
+	//根据按钮被拉开的距离计算上下两个圆的半径
+	this.c1.r = this.canvasWidth/4-this.d*this.canvasWidth/10;
+	this.c2.r = this.canvasWidth/4-this.d*this.canvasWidth/5;
+	//根据按钮被拉开的距离计算下圆的位置
+	this.c2.y = this.c1.y+this.d*this.canvasWidth/2,
+	this.p1 = {
+		x:this.c1.x+this.c1.r,
+		y:this.c1.y
+	};
+	this.p2 = {
+		x:this.c2.x+this.c2.r,
+		y:this.c2.y
+	};
+	this.p3 = {
+		x:this.c2.x - this.c2.r,
+		y:this.c2.y
+	};
+	this.p4 = {
+		x:this.c1.x-this.c1.r,
+		y:this.c1.y
+	};
+	this.cp1 = {
+		x:this.c1.x+this.c2.r,
+		y:this.c1.y+Math.abs(this.c1.y-this.c2.y)/2
+	};
+	this.cp2 = {
+		x:this.c2.x - this.c2.r,
+		y:this.c1.y+Math.abs(this.c1.y-this.c2.y)/2
+	};
+} 
+```  
+2.带有缓动的回弹函数   
+```draw```函数为requestAnimationFrame调用的绘制函数，回弹动画自然要在draw函数之中。回弹动画只需要将d逐步降至0即可，如果d每次都降低一样的距离那就是匀速回弹，失去了效果中的弹性，所以我们使用tween.js中的Exponential.Out函数来计算每次回弹d的具体数值。关于tween.js可以参见[这里](https://github.com/sole/tween.js)  
+```javascript
+Drop.prototype.draw = function(time){
+	......
+	//做回弹动画，根据回弹用时计算出拉动距离d
+	if(this.rebounding){
+		if(this.d >0){
+			//回弹时的时间函数,取自tween.js  Exponential.Out
+			function timing(t, b, c, d) {
+				/*
+				 * t: current time（当前时间）；
+				 * b: beginning value（初始值）；
+				 * c: change in value（变化量）；
+				 * d: duration（持续时间）。
+				*/
+	            return (t==d) ? b + c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+	        }
+	        var toTime = this.useTime?1500:80;
+	        this.d = timing(this.time-this.reboundTime,this.reboundD,-this.reboundD,toTime);
+			this.d = this.d<0.01?0:this.d;
+			this.startd = this.d;
+		}else{
+			this.rebounding = false;
+		} 
+	}
+	......
+}
+```
+3.如何使用Drop  
+首先引入drop.js,然后```var drop = new Drop(canvas);```新建对象，将canvas元素传入（这里传入的是节点不是id）。然后再循环函数```requestAnimationFrame```中调用绘制方法```drop.draw()```这里可以传入当前帧时间time来更好的控制动画。在计算出鼠标或者手指的移动距离后将距离换算成百分比传入```drop.pull(d);```就可以使按钮拉动。最后当拉过最大距离触发刷新事件后canvas会触发一个load事件，在事件中执行加载方法，在加载完成后执行```drop.finish();```使按钮恢复正常。  
+
+时间仓促未作android手机测试，如有任何bug请在Issues中提出。  
+
+项目地址[github](https://github.com/cyclegtx/drop.js)
+如有问题或者建议请微博<a href="http://weibo.com/uedtianji" target="_blank">@UED天机</a>。我会及时回复  
+更多教程请关注<a href="http://ued.sexy" target="_blank">ued.sexy</a>
 

@@ -64,11 +64,11 @@ Drop.prototype.calc = function(){
 		y:this.c1.y
 	};
 	this.cp1 = {
-		x:this.c1.x+this.c2.r,
+		x:this.p2.x,
 		y:this.c1.y+Math.abs(this.c1.y-this.c2.y)/2
 	};
 	this.cp2 = {
-		x:this.c2.x - this.c2.r,
+		x:this.p3.x,
 		y:this.c1.y+Math.abs(this.c1.y-this.c2.y)/2
 	};
 } 
